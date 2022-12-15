@@ -1,5 +1,7 @@
 # testeApiNode
 
+nodemon index.js
+
 ## 📦Pacotes necessários
 
 1. **express**
