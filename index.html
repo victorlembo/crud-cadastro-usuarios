@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Usuarios</title>
+
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+
+
+  <style type="text/css">
+    html {
+      margin-left: 5%;
+      margin-right: 5%;
+      margin-top: 5%;
+    }
+
+    button {
+      margin-top: 5%;
+      margin-bottom: 5%;
+    }
+
+    div {
+      margin-top: 2%;
+      margin-bottom: 2%;
+    }
+  </style>
+
+
+
+
+</head>
+
+<body>
+
+  <h3>Cadastro de Usuarios</h3>
+
+  <form action="http://localhost:3000/usuarios" method="POST">
+    <div class="form-group">
+      <label for="nome">Nome</label>
+      <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite seu nome" required="required">
+    </div>
+    <div class="form-group">
+      <label for="data_nascimento">Data de Nascimento</label>
+      <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" placeholder="dd/mm/aaaa"
+        required="required" />
+    </div>
+    </div>
+    <div class="form-group">
+      <label for="email">Endereço de email</label>
+      <input type="email" class="form-control" id="email" name="email" placeholder="fulano@mail.com"
+        required="required">
+
+    </div>
+    <div class="form-group">
+      <label for="senha">Senha</label>
+      <input type="senha" class="form-control" id="pass" name="senha" minlength="8" maxlength="16" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary" value="Enviar">Enviar</button>
+
+    <button type="button" class="btn btn-warning" onclick="atualizar()">Atualizar Lista</button>
+
+  </form>
+
+
+  <div style="height: 300px; overflow: scroll">
+    <table class="table" id="tabelaResultados">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Data de Nascimento</th>
+          <th scope="col">Email</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Apagar</th>
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+
+
+  <script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+  <script type="text/javascript">
+
+
+
+    function atualizar() {
+
+
+
+      $
+        .ajax(
+          {
+            method: "GET",
+            url: "http://localhost:3000/usuarios/",
+            contentType: "application/json",
+
+            success: function (response) {
+              $('#tabelaResultados > tbody > tr')
+                .remove();
+
+              for (var i = 0; i < response.length; i++) {
+                $('#tabelaResultados > tbody')
+                  .append(
+                    '<tr id="'
+                    + response[i].id
+                    + '"><td>'
+                    + response[i].id
+                    + '</td><td>'
+                    + response[i].nome
+                    + '</td><td>'
+                    + response[i].idade
+                    + '</td><td><button type="button" onclick="editarUsuario('
+                    + response[i].id
+                    + ')" class="btn btn-primary">Ver</button></td><td><button type="button" class="btn btn-danger" onclick="apagarUsuario('
+                    + response[i].id
+                    + ')">Apagar</button></td></tr>');
+              }
+
+            }
+          }).fail(
+            function (xhr, status, errorThrown) {
+              alert("Erro ao buscar usuario: "
+                + xhr.responseText);
+            });
+
+    }
+
+
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>
