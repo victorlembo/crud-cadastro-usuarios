@@ -41,7 +41,10 @@
 
   <h3>Cadastro de Usuarios</h3>
 
-  <form action="http://localhost:3000/usuarios" method="POST">
+  <form action="http://localhost:3000/usuarios" method="POST" id="formCadastroUsuario">
+    <div class="mb-3">
+      <label for="id" class="form-label">ID</label> <input type="text" class="form-control" id="id" readonly="readonly">
+    </div>
     <div class="form-group">
       <label for="nome">Nome</label>
       <input type="text" class="form-control" id="nome" name="nome" placeholder="Digite seu nome" required="required">
@@ -63,11 +66,16 @@
       <input type="senha" class="form-control" id="pass" name="senha" minlength="8" maxlength="16" required>
     </div>
 
-    <button type="submit" class="btn btn-primary" value="Enviar">Enviar</button>
+    <button type="submit" class="btn btn-success" value="Enviar">Enviar</button>
 
-    <button type="button" class="btn btn-warning" onclick="atualizar()">Atualizar Lista</button>
+    <button type="button" class="btn btn-primary" onclick="atualizarUsuario(id)">Alterar</button>
 
+    <button type="button" class="btn btn-warning" onclick="atualizarLista()">Atualizar Lista</button>
+
+    <button type="button" class="btn btn-danger" onclick="limparTela()">Limpar</button>
   </form>
+
+
 
 
   <div style="height: 300px; overflow: scroll">
@@ -105,11 +113,7 @@
 
   <script type="text/javascript">
 
-
-
-    function atualizar() {
-
-
+    function atualizarLista() {
 
       $
         .ajax(
@@ -117,7 +121,7 @@
             method: "GET",
             url: "http://localhost:3000/usuarios",
             contentType: "application/json",
-           
+
 
             success: function (response) {
               $('#tabelaResultados > tbody > tr')
@@ -152,6 +156,118 @@
 
     }
 
+
+    function editarUsuario(id) {
+
+      $.ajax({
+        method: "GET",
+        url: `http://localhost:3000/usuarios/${id}`,
+        contentType: "application/json",
+
+        success: function (response) {
+          for (var i = 0; i < response.length; i++) {
+            $("#id").val(response[i].id);
+            $("#nome").val(response[i].nome);
+            $("#data_nascimento").val(response[i].data_nascimento);
+            $("#email").val(response[i].email);
+            $("#pass").val(response[i].senha);
+          }
+
+        }
+      }).fail(function (xhr, status, errorThrown) {
+        alert("Erro ao buscar usuario por id: " + xhr.responseText);
+      });
+
+    }
+
+
+    function apagarUsuario(id) {
+      if (confirm('Deseja realmente apagar?')) {
+
+        $.ajax({
+          method: "DELETE",
+          url: `http://localhost:3000/usuarios/${id}`,
+          data: "id=" + id,
+          success: function (response) {
+
+
+            alert(response);
+
+          }
+        }).fail(
+          function (xhr, status, errorThrown) {
+            alert("Erro ao apagar usuario por id: "
+              + xhr.responseText);
+          });
+
+      }
+    }
+
+
+
+    function limparTela() {
+
+      document.getElementById('formCadastroUsuario').reset();
+
+    }
+
+    function atualizarUsuario(id) {
+
+      var id = $("#id").val();
+      var nome = $("#nome").val();
+      var data_nascimento = $("#data_nascimento").val();
+      var email = $("#email").val();
+      var senha = $("#pass").val();
+
+      if (nome == null || nome != null && nome.trim() == '') {
+        $("#nome").focus();
+        alert('Campo nome obrigatorio!');
+        return;
+
+      }
+
+      if (data_nascimento == null || data_nascimento != null && data_nascimento.trim() == '') {
+        $("#data_nascimento").focus();
+        alert('Campo data de nascimento obrigatorio!');
+        return;
+
+      }
+
+      if (email == null || email != null && email.trim() == '') {
+        $("#email").focus();
+        alert('Campo email obrigatorio!');
+        return;
+
+      }
+
+      if (senha == null || senha != null && senha.trim() == '') {
+        $("#pass").focus();
+        alert('Campo senha obrigatorio!');
+        return;
+
+      }
+
+      $.ajax({
+        method: "PUT",
+        url: `http://localhost:3000/usuarios/${id}`,
+        data: JSON.stringify({
+          id: id,
+          nome: nome,
+          data_nascimento: data_nascimento,
+          email: email,
+          senha: senha
+        }),
+        contentType: "application/json; charset-utf-8",
+        success: function (response) {
+          $("#id").val(response.id);
+
+          alert("Gravou com sucesso!");
+        }
+      }).fail(function (xhr, status, errorThrown) {
+        alert("Erro ao salvar: " + xhr.responseText);
+      });
+
+    }
 
 
 
