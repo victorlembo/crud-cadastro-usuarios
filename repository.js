@@ -8,6 +8,7 @@ const pool = new Pool({
   host: POSTGRE_URI,
   database: POSTGRE_DB,
   password: POSTGRE_PASSWORD,
+
   port: 5432,
 });
 
@@ -36,12 +37,15 @@ if (!POSTGRE_PASSWORD) {
 }
 
 const getUsuarios = (request, response) => {
-  pool.query("SELECT * FROM usuarios", (error, results) => {
-    if (error) {
-      throw error;
+  pool.query(
+    "SELECT * FROM usuarios",
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      response.status(200).json(results.rows);
     }
-    response.status(200).json(results.rows);
-  });
+  );
 };
 
 const getUsuarioById = (request, response) => {

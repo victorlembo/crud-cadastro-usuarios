@@ -89,16 +89,6 @@
   </div>
 
 
-
-
-
-
-
-
-
-
-
-
   </div>
 
 
@@ -125,8 +115,9 @@
         .ajax(
           {
             method: "GET",
-            url: "http://localhost:3000/usuarios/",
+            url: "http://localhost:3000/usuarios",
             contentType: "application/json",
+           
 
             success: function (response) {
               $('#tabelaResultados > tbody > tr')
@@ -142,7 +133,9 @@
                     + '</td><td>'
                     + response[i].nome
                     + '</td><td>'
-                    + response[i].idade
+                    + response[i].data_nascimento
+                    + '</td><td>'
+                    + response[i].email
                     + '</td><td><button type="button" onclick="editarUsuario('
                     + response[i].id
                     + ')" class="btn btn-primary">Ver</button></td><td><button type="button" class="btn btn-danger" onclick="apagarUsuario('

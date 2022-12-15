@@ -4,9 +4,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const port = 3000;
+const cors = require("cors");
 
 const repository = require("./repository");
-
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use(
@@ -16,7 +17,8 @@ app.use(
 );
 
 
-app.listen(port, () => {  
+
+app.listen(port, () => {
   console.log(`Servidor rodando na porta de conexão ${port}.`);
 });
 
