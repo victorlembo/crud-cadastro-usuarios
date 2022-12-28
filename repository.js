@@ -1,6 +1,7 @@
 require("dotenv").config(); // carrega as variáveis definidas no .env
 
 const { POSTGRE_URI, POSTGRE_DB, POSTGRE_USER, POSTGRE_PASSWORD } = process.env;
+const moment = require("moment");
 
 const Pool = require("pg").Pool;
 const pool = new Pool({
@@ -79,7 +80,7 @@ const updateUsuario = (request, response) => {
   const { nome, data_nascimento, email, senha } = request.body;
 
   pool.query(
-    "UPDATE usuarios SET nome = $2, data_nascimento = $3, email = $4, senha = $5 WHERE id = $1",
+    "UPDATE usuarios SET nome = $1, data_nascimento = $2, email = $3, senha = $4 WHERE id = $5",
     [nome, data_nascimento, email, senha, id],
     (error, result) => {
       if (error) {

@@ -43,7 +43,7 @@
 
   <form action="http://localhost:3000/usuarios" method="POST" id="formCadastroUsuario">
     <div class="mb-3">
-      <label for="id" class="form-label">ID</label> <input type="text" class="form-control" id="id" readonly="readonly">
+      <label for="id" class="form-label">ID</label> <input type="text" class="form-control" id="id">
     </div>
     <div class="form-group">
       <label for="nome">Nome</label>
@@ -113,6 +113,10 @@
 
   <script type="text/javascript">
 
+    function formatarData(data_nascimento) {
+      var data_nascimento = moment().format("DD/MM/YYYY")
+    }
+
     function atualizarLista() {
 
       $
@@ -140,7 +144,7 @@
                     + response[i].data_nascimento
                     + '</td><td>'
                     + response[i].email
-                    + '</td><td><button type="button" onclick="editarUsuario('
+                    + '</td><td><button type="button" onclick="verUsuario('
                     + response[i].id
                     + ')" class="btn btn-primary">Ver</button></td><td><button type="button" class="btn btn-danger" onclick="apagarUsuario('
                     + response[i].id
@@ -157,7 +161,7 @@
     }
 
 
-    function editarUsuario(id) {
+    function verUsuario(id) {
 
       $.ajax({
         method: "GET",
@@ -187,7 +191,7 @@
         $.ajax({
           method: "DELETE",
           url: `http://localhost:3000/usuarios/${id}`,
-          data: "id=" + id,
+
           success: function (response) {
 
 
@@ -213,43 +217,18 @@
 
     function atualizarUsuario(id) {
 
-      var id = $("#id").val();
-      var nome = $("#nome").val();
-      var data_nascimento = $("#data_nascimento").val();
-      var email = $("#email").val();
-      var senha = $("#pass").val();
 
-      if (nome == null || nome != null && nome.trim() == '') {
-        $("#nome").focus();
-        alert('Campo nome obrigatorio!');
-        return;
+      var id = $('#id').val();
+      var nome = $('#nome').val();
+      var data_nascimento = $('#data_nascimento').val();
+      var email = $('#email').val();
+      var senha = $('#pass').val();
 
-      }
-
-      if (data_nascimento == null || data_nascimento != null && data_nascimento.trim() == '') {
-        $("#data_nascimento").focus();
-        alert('Campo data de nascimento obrigatorio!');
-        return;
-
-      }
-
-      if (email == null || email != null && email.trim() == '') {
-        $("#email").focus();
-        alert('Campo email obrigatorio!');
-        return;
-
-      }
-
-      if (senha == null || senha != null && senha.trim() == '') {
-        $("#pass").focus();
-        alert('Campo senha obrigatorio!');
-        return;
-
-      }
 
       $.ajax({
         method: "PUT",
         url: `http://localhost:3000/usuarios/${id}`,
+        contentType: "application/json",
         data: JSON.stringify({
           id: id,
           nome: nome,
@@ -257,17 +236,18 @@
           email: email,
           senha: senha
         }),
-        contentType: "application/json; charset-utf-8",
         success: function (response) {
-          $("#id").val(response.id);
 
-          alert("Gravou com sucesso!");
+
+          alert(response);
+
         }
       }).fail(function (xhr, status, errorThrown) {
-        alert("Erro ao salvar: " + xhr.responseText);
+        alert("Erro ao buscar usuario por id: " + xhr.responseText);
       });
 
     }
+
 
 
 
